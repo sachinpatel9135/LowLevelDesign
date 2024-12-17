@@ -23,5 +23,9 @@ abstract public class ParkingSpot {
         return !isOccupied;
     }
 
+    public String getId() {
+        return id;
+    }
+
     public abstract VehicleType getSupportedVehicleType();
 }

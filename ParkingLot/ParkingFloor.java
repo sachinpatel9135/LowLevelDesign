@@ -18,7 +18,7 @@ public class ParkingFloor {
         for(int i=0; i<truckSpots; i++) spots.add(ParkingSpotFactory.createParkingSpot("T"+i, VehicleType.TRUCK));
     }
 
-    public ParkingSpot findAvailableSlot(VehicleType vehicleType) {
+    public ParkingSpot findAvailableSpot(VehicleType vehicleType) {
         for(ParkingSpot spot: spots) {
             if(spot.getSupportedVehicleType() == vehicleType && spot.isAvailable()) {
                 return spot;

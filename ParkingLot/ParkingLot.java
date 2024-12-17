@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ParkingLot.ParkingSpot.ParkingSpot;
-import ParkingLot.Vehicles.*;
+import ParkingLot.Vehicles.Vehicle;
 
 public class ParkingLot {
     private static ParkingLot instance;

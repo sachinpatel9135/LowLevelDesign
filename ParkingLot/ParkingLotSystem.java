@@ -12,7 +12,7 @@ public class ParkingLotSystem {
         Vehicle car = new Car("CAR123");
         ParkingSpot spot = lot.parkVehicle(car);
         if (spot != null) {
-            System.out.println("Car parked at spot: " + spot);
+            System.out.println("Car parked at spot: " + spot.getId());
         } else {
             System.out.println("No spot available for the car.");
         }
