@@ -1,0 +1,1 @@
+Parking Lot LLD - https://docs.google.com/document/d/1nqQcomra_SjkywxVO3LHeCe-kjFb3nkjXteEpfkudpw/edit?tab=t.0
