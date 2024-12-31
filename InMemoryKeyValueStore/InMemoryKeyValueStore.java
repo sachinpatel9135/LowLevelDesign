@@ -120,5 +120,7 @@ public class InMemoryKeyValueStore<K, V> {
 
         System.out.println(kvStore.get("key1")); // Outputs: null
         System.out.println(kvStore.size());     // Outputs: 1
+        System.out.println(kvStore.get("key2"));  // Outputs: value2
+        System.out.println(kvStore.get("key1"));  // Outputs: null
     }
 }
