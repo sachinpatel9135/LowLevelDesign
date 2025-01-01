@@ -1,7 +1,8 @@
 package TaskManagementSystem.Account;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import TaskManagementSystem.TaskCommand.Command;
 
@@ -29,5 +30,10 @@ public class User{
 
     public void addTaskHistory(String taskId) {
         taskHistory.add(taskId);
+    }
+
+    public List<String> getTaskHistory() {
+        List<String> taskHistoryList = new ArrayList<>(taskHistory);
+        return taskHistoryList;
     }
 }

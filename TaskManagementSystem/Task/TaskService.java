@@ -8,6 +8,10 @@ public class TaskService {
     private HashMap<String, Task> tasks = new HashMap<>();
     private HashMap<String, User> users = new HashMap<>();
 
+    public TaskService(HashMap<String, User> users) {
+        this.users = users;
+    }
+
     public void createTask(Task task) {
         if(tasks.containsKey(task.getId())) throw new IllegalArgumentException("Task with this id aready exists!");
         tasks.put(task.getId(), task);

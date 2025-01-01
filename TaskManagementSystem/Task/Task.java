@@ -11,7 +11,7 @@ public class Task {
     private TaskStatus taskStatus;
     private String assigneeId;
 
-    Task(String id, String title, String description, TaskPriority taskPriority) {
+    public Task(String id, String title, String description, TaskPriority taskPriority) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -21,6 +21,10 @@ public class Task {
 
     public String getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public void setAssigneeId(String assigneeId) {
