@@ -1,0 +1,188 @@
+/*
+IRCTC
+
+- User should be able to search trains between two stations on a date
+- User should be able to select a train and book a ticket
+- There can be different type of seats available
+- Make payment, get ticket and seat is confirmed, get notification of confirmed ticket
+- Multiple seats can be booked and we will try to find nearest seating arrangement
+
+Out of scope: train status
+
+Actor - Account
+        - User - search train between station, book tickets, make payment, past trips, upcoming trips
+            - there should be filtering and sorting present in search
+        - admin - add/remove train,station,
+- System -  confirm ticket, send notification on confirmed tickets
+
+Train - name, id, List of stations(route, time), fair, list of seats, 
+Station - name, city
+Ticket - source, destination station, fair, train number, startTime
+*/
+
+abstract class Account {
+    String id;
+    String name;
+    String mail;
+}
+
+enum Tier{
+    GENERAL,
+    AC,
+    SLEEPER
+}
+
+public class Ticket {
+    private String sourceCity;
+    private String destinationCity;
+    private LocalDateTime localDateTime;
+    private String trainNumber;
+    private Double cost;
+    private List<String> seatInfo; //concatenation of coach number and seat number
+    private Tier tier;
+}
+
+public class CityTimeDistance {
+    private String cityName;
+    private LocalDateTime localDateTime;
+    private Double distanceFromSource;
+}
+
+public class Coach {
+    private String number;
+    private Tier tier;
+    private List<int> seats; // 0 means seat is available else it's booked
+    private Double fairRate;
+
+    public List<int> getSeats() {
+        return seats;
+    }
+}
+
+public class TrainRoutePoint {
+    private int index;
+    private LocalDateTime localDateTime;
+    private Double distance;
+}
+
+public class Train {
+    private String number;
+    private String name;
+    private double fairRate;
+    private List<Coach> coaches;
+    private String source;
+    private String destination;
+    private Hashmap<String, TrainRoutePoint> route;
+
+    public String getNumber() {
+        return number;
+    }
+
+    public List<Coach> getCoaches() {
+        return coaches;
+    }
+    
+
+    public Hashmap<String, TrainRoutePoint> getRoute {
+        return route;
+    }
+
+    public Train() {}
+}
+
+//we should create a TrainProxyService
+public class TrainService {
+    private Hashmap<String, Train> trains;
+
+    public void addTrain(String number, String name, List<CityTimeDistance> route, double fairRate, List<Coach> coaches) {
+        Train train = new Train();
+        trains[number] = train;
+    }
+
+    public List<Train> getTrains() {
+        return trains;
+    }
+}
+
+public class User extends Account{
+    List<Ticket> tickets;
+    String upiId;
+    String creditCardNumber;
+    String cvv;
+}
+
+public class TrainSearchSummary {
+    private String trainNumber;
+    private Hashmap<Teir,Pair<int, Double>> tierAvailableSeatsFair; //tier to number of available seats;
+
+    TrainSearchSummary(Train train, String source, String destination) {
+        this.trainNumber = train.getNumber();
+        coach[0] -> tier -> 5
+        coach[1] -> 
+        train.getCoaches().stream().collect(e -> {
+            List<int> seats = e.getSeats().filter(sea);
+            //get sum of all available seats for each tier and add fair along with each tier
+        })
+    }
+}
+
+
+enum PaymentType {
+    UPI,
+    CREDIT_CARD,
+    CASH
+}
+interface PaymentStrategy {
+    pay();
+}
+
+public class PaymentStrategyController {
+    private PaymentStrategy paymentStrategy;
+    void setPaymentStrategy() {
+        this.paymentStrategy = paymentStrategy;
+    }
+
+    void pay() {
+        paymentStrategy.pay();
+    }
+}
+
+public class UpiPaymentStrategy implements PaymentStrategy {
+    private string upiId;
+    pay();
+}
+
+pubic class CardPaymentStrategy implements PaymentStrategy {
+    private string cardNumber;
+    pay();
+}
+
+public PaymentService {
+    private Map<PaymentType, PaymentStrategy> paymentStrategyMapping;
+    PaymentStrategyController paymentStrategyController;
+    pubic boolean makePayment(Double amount, PaymentStrategy paymentStrategy) {
+        PaymentStrategy.setPaymentStrategy(paymentStrategy);
+        paymentStrategyController.pay();
+    }
+}
+
+public class UserService {
+    TrainService trainService;
+    public List<TrainSearchSummary> searchTrains(String source, String destination, Date date) {
+        List<Train> trains =  trainService.getTrains().stream().filter(e -> {
+            route = e.getRoute();
+            src = route.get(source).index;
+            dst = route.get(destinatoin).index;
+            if (src<dst) retrun 1;
+            })
+            .collect(toList());
+        List<TrainSearchSummary> trainSearchSummary = trains.stream().foreach(e->TrainSearchSummary(e)).collect(toList());
+        return trainSearchSummary;
+    }
+    public Ticket bookTicket(TrainSearchSummary trainSearchSummary, Tier tier, int numberOfSeats) {
+        payementService.makePayment(amount, CardPaymentStrategy("cardNumber", "cvv", amount));
+        payementService.makePayment(amount, UpiPaymentStrategy("upiId", amount));
+        //payment -> setPaymentStrategy
+        //generateTicket
+    }
+}

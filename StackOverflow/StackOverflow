@@ -1,0 +1,191 @@
+/*
+Designing Stack Overflow
+Requirements
+Users can post questions, answer questions, and comment on questions and answers.
+Users can vote on questions and answers.
+Questions should have tags associated with them.
+Users can search for questions based on keywords, tags, or user profiles.
+The system should assign reputation score to users based on their activity and the quality of their contributions.
+The system should handle concurrent access and ensure data consistency.
+
+Actors - User, System
+Entities - Question, answer
+
+User - Post questions, answer questions, comment on question/answer, vote on question/answer
+        search based on keywords, tags, user Profiles
+System - should assign reputation score based on activity - total upvote/downvote could be reputation
+StackOverflow -    
+
+Question - creator, detail, Date
+ */
+
+abstract class Account {
+    private String id;
+    private String username;
+    private String password;
+}
+
+class UserActivity {
+    // private String userId;
+    
+}
+
+/*
+ User data - id, password, reputation, questions, answers, badges
+ */
+class User extends Account {
+}
+
+class UserActivity {
+    private String userId;
+    int reputation;
+    private List<String> questionIds; //list of question id
+    private List<String> answerIds; //list of answer id
+
+    public void addQuestionIds(String id) {
+        questionIds.add(id);
+    }
+
+    public void addAnswerIds(String id) {
+        answerIds.add(id);
+    }
+
+    void updateReputation(int upvote) {
+        reputation += upvote;
+    }
+}
+
+class System extends Account {
+}
+
+enum POST {
+    QUESTION, ANSWER
+}
+
+class Comment {
+    private String id;
+    private String description;
+    private String userId;
+    private String parentId;
+    private POST post;
+}
+
+class UserService {
+    HashMap<String, User> users;
+    HashMap<String, UserActivity> userActivity;
+    QuestionService questionService;
+    AnswerService answerService;
+    void createQuestion(String title, String description, String userId) {
+        Question question = questionService.createQuestion(title, description, userId);
+        userActivity.get(userId).addQuestionIds(question.getId());
+    }
+
+    void createAnswer(String id, String description, String userId, String questionId) {
+        Answer answer = answerService.createAnswer(id, description, userId, questionId);
+        userActivity.getId(userId).addAnswerIds(answer.getId());
+    }
+
+    void addComment(String parentId, String description, POST post, String userId) {
+
+    }
+
+    void upvote(String questionId, String userId) {
+        questionService.upvote(questionId);
+        userActivity.get(userId).updateReputation(1);
+    }
+
+    void downvote() {
+        questionService.downvote(questionId);
+        userActivity.get(userId).updateReputation(-1);
+    }
+}
+
+class Question {
+    private String id;
+    private String title;
+    private String description;
+    private LocalDateTime localDateTime;
+    private String userId;
+    private Long upvotes;
+    private List<String> answerIds; //list of answer ids
+    private List<String> tags;
+    private List<Comment> comments;
+
+    Question(String id, String title, String description, String userId) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.userId = userId;
+        this.localDateTime = LocalDateTime.now();
+        this.upvotes = 0;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void upvote(int upvote) {
+        upvotes += upvote;
+    }
+}
+
+class QuestionService {
+    private int id;
+    private HashMap<string, Question> questions;
+
+    Question createQuestion(String title, String description, String userId) {
+        Question question = new Question(id++, title, description, userId);
+        questions.put(question.getId(), question);
+        return question;
+    }
+
+    void upvote(String questionId) {
+        questions.get(questionId).put(questionId, question.upvote(1));
+    }
+
+    void downvote(String questionId) {
+        questions.get(questionId).put(questionId, question.upvote(-1));
+    }
+}
+
+class Answer {
+    private String id;
+    private String description;
+    private String userId;
+    private Long upvotes;
+    private Boolean isAccepted;
+    private String questionId;
+    private List<Comment> comments;
+
+    public String getId() {
+        return id;
+    }
+
+    public void upvote(int upvote) {
+        upvotes += upvote;
+    }
+}
+
+class AnswerService {
+    Long id;
+    HashMap<String, Answer> idAnswerMapping;
+    Answer createAnswer(String id, String description, String userId, String questionId) {
+        Answer answer = new Answer(id++, description, userId, questionId);
+        idAnswerMapping.put(id, answer);
+        return answer;
+    }
+}
+
+class SearchService {
+    HashMap<String, List<String>> wordsQuestionIdMapping;
+    List<Question> search(String wordOrTag) {
+
+    }
+}
+
+enum {
+    
+}
+class StackOverflow {
+    search()
+}

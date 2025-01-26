@@ -1,0 +1,82 @@
+package SnakeAndLadder;
+/*
+Snake And Ladder
+Game - Board, snakes, ladders
+        Board - fixed size
+        snakes - start point, end point and start Point > endPoint
+        ladder - start point , end point and start point < endPoint
+
+GameBuilder - setBoardSize() -> addSnake() -> addLadder
+
+Dice - 0-6
+User can start a new Game
+2 users can play a game
+GameManager - create new Game, stores history of all games, 
+                maintains current game status for each user
+
+UserManager - create/update/delete users
+
+ */
+
+class Account {};
+
+class User: public Account {
+private:
+    int id;
+};
+
+class Admin: public Account {
+};
+
+class SnakeAndLadderGame {
+private:
+    int size;
+    unoderdered_map<int,int> snake,ladders; //key is source and value is destination
+public:
+    SnakeAndLadderGame(size) {
+        this->size = size;
+    }
+
+    void addSnake(int startPosition, int endPosition) {
+        if(startPosition > endPosition) {
+            snake[startPosition] = endPosition;
+        }
+        else throw "Start should be greater than end position";
+    }
+
+    void addladder(int startPosition, int endPosition) {
+        if(startPosition < endPosition) {
+            ladder[startPosition] = endPosition;
+        }
+        else throw "Start position should be smaller than end position";
+    }
+};
+
+class Game {
+    unoderdered_map<user, location> 
+    static SnakeAndLadderGame gameBoard;
+    Game() {
+        gameBoard = gameBoard;
+    }
+    
+    move();
+}
+
+
+
+class GameManager {
+private:
+    GameManager();
+    int gameId;
+    static GameManager gameManager;
+    unoderdered_map<int, game> games;
+public:
+    void createGame(vector<User> users) {
+        gameId++;
+        SnakeAndLadderGame game = new ;
+    }
+};
+
+int main() {
+    return 0;
+}

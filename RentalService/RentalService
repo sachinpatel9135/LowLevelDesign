@@ -1,0 +1,228 @@
+package RentalService;
+/*
+P0
+- Customers should be able to search for cars based on various criteria, such as car type, price range, and availability.
+- The system should handle reservations, including creating, modifying, and canceling reservations.
+- there can be different kind of cars
+- get estimate before booking
+- select cars
+- book car between time/date
+- location sensitive
+- make payment and then return car
+- The system should be able to handle concurrent reservations and ensure data consistency.
+
+P1
+private owner can list their cars
+private owner should get money when car is returned
+
+
+Actors - User, System, Admin
+User - Search based on criterias, reserve, cancel, make payment, return car
+System - fair calculation, reservations, availability of cars, ticket generation
+Admin - addition/removal of car
+ */
+
+abstract class Account {
+    private String id;
+    private String name;
+    private String mailId;
+    private String phoneNumber;
+}
+
+class City {
+    private String name;
+    private String pinCode;
+}
+
+
+class User extends Account {
+    private ArrayList<String> bookings = new ArrayList<>();
+    private String licenseNumber;
+    private City city;
+}
+
+abstract class Car {
+    private String id;
+    private String number;
+    private Double initialFair;
+    private Double costPerHour;
+    private boolean isBooked;
+    private Int numSeats;
+    private City city;
+    private BookingSchedule bookingSchedule;
+    
+}
+
+class Booking {
+    private String id;
+    private String carId;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
+    private String userId;
+    private Double cost;
+}
+
+class BookingService {
+    private static long id;
+    private HashMap<String, ArrayList<Booking>> carBookings = new HashMap<>();
+    private Hashmap<String, ArrayList<Booking>> userBookings = new HashMap<>();
+
+    public void bookCar(String userId, CarDetails carDetails, LocalDateTime startDate, LocalDateTime endDate) {
+        carBookings.put(carDetails.getCarId(), new Booking(id++,carDetails.getCarId(), startDate, endDate, carDetails.getCost(), userId));
+        userBookings.put(userId, new Booking(id++,carDetails.getCarId(), startDate, endDate, carDetails.getCost(), userId));
+    }
+
+    pubic boolean isAvailable(String carId, LocalDateTime startTime, LocalDateTime endTime) {
+        return carBookings.get(carId).stream().anyMatch(booking -> {return !(booking.startTime() > endTime || booking.endTime() < startTime);})
+    }
+}
+
+class Sedan extends Car {
+    public Int getId() {
+        return id;
+    }
+    
+    public Double getInitialFair() {
+        return initialFair;
+    }
+
+    public Double getCostPerHour() {
+        return costPerHour;
+    }
+}
+
+class SUV extends Car {
+    public Int getId() {
+        return id;
+    }
+    
+    public Double getInitialFair() {
+        return initialFair;
+    }
+
+    public Double getCostPerHour() {
+        return costPerHour;
+    }
+}
+
+enum CarType {
+    SUV,
+    Sedan
+}
+
+class CarDetails{
+    private String carId;
+    private CarType carType;
+    private Double cost;
+    CarDetails(Date startDate, Date endDate, Car car) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.car = car;
+        this.cost = (endDate - startDate)*car.getCostPerHour()*24 + car.getInitialFair();
+    }
+}
+
+
+class CarService {
+    private HashMap<string, Car> cars = new ArrayList<>();
+    private int id;
+    private BookingService bookingService;
+
+    public void addCar(Car car) {
+        cars.put(car.getId(), car);
+    }
+    
+    public Car getCar(String id) {
+        return cars.get(id);
+    }
+
+    public void deleteCar(String id) {
+        cars.delete(id);
+    }
+
+    public HashMap<string, Car> getCars() {
+        return cars;
+    }
+
+    public Double getEstimation(String id, Date startDate, Date endDate) {
+        Car car = cars.get(id);
+        return car.initialFair() + (endDate - startDate)*24*car.getCostPerHour();
+    }
+
+    public List<CarDetails> search(City city, Date startDate, Date endDate) {
+        return cars.stream().filter(car -> {return car.getCity() == city && bookingService.isAvailable(car.getId(), startDate, endDate);}).map(car-> {new CarDetails(...)}).collect(toImmutableList());
+    }
+}
+
+interface PaymentStrategy {
+    public void pay();
+}
+
+class UpiPaymentStrategy implements PaymentStrategy {
+    @Override
+    public void pay();
+}
+
+class CreditCardPaymentStrategy implements PaymentStrategy {
+    public void pay() {}
+}
+
+abstract class PaymentInput {
+    private Double amount;
+}
+
+class UpiPaymentInput extends PaymentInput {
+    private String upiId;
+}
+
+class CreditCardPayementInput extends PaymentInput {
+    private String cardNo;
+    private String cvv;
+    private String endDate;
+}
+
+class PaymentStrategyController {
+    PaymentStrategy payementStrategy;
+
+    public void setPaymentStrategy(PaymentStrategy payementStrategy) {
+        this.payementStrategy = payementStrategy;
+    }
+
+    public void pay(PaymentInput paymentInput) {
+        payementStrategy.pay(paymentInput);
+    }
+}
+
+class PaymentController {
+    public void pay(PaymentType payementType, String userId, Double amount) {
+        switch (payementType):
+            case(UpiPayment)
+                payementStrategy = new UpiPaymentStrategy(user.getUpiId());
+                payementStrategy.pay();
+    }
+}
+
+class UserService {
+    private HashMap<String, User> users = new HashMap<>();
+    private CarService carService;
+    PaymentStrategyController paymentStrategyController;
+
+    public ArrayList<CarDetails> search(City city, LocalDateTime startDate, LocalDateTime endDate) {
+        carService.search(location, startDate, endDate);
+    }
+
+    public boolean reserveCar(String userId, CarDetails carDetails, LocalDateTime startDate, LocalDateTime endDate) {
+        bookingService.bookCar(userId, carDetails, startDate, endDate);
+    }
+    //PaymentStrategy paymentStrategy, CreditCardPayementInput creditCardPayementInput
+    public boolean makePayment(String userId, PaymentType paymentType, Double amount) {
+        // paymentStrategyController.setPaymentStrategy(new CreditCardPaymentStrategy(creditCardPayementInput));
+        // paymentStrategyController.pay(amount);
+
+        paymentController.pay(userId, payementType, amount);
+    }
+
+    public boolean returnCar() {
+    }
+}
+
